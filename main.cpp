@@ -1,4 +1,6 @@
 #include <iostream>
+#include <string>
+#include <limits>
 #include "menu.h"
 
 using namespace std;
@@ -38,7 +40,13 @@ int main(){
     cout << ">> ";
    
 
-    cin >> input;
+    if (!(cin >> input)) {
+        cout << "Ошибка! Введите числовое значение" << endl;
+        cin.clear(); 
+        cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
+        input = -1;
+        continue;
+    }
 
     switch (input){
         case Menu::RSA:
