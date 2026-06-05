@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <cstdint>
+#include <iostream>
 
 std::vector <uint8_t> decrypt(const std::vector<uint8_t>& data, const std::vector <uint8_t>& key);
 
