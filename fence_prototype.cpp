@@ -95,7 +95,7 @@ void checkRails(int& rails) {
 int main() {
   cout << "Enter the string to encrypt: ";
   string data;
-  cin >> data;
+  getline(cin, data);
 
   cout << "Number of rails for the first pass: ";
   int rails1;
