@@ -3,20 +3,18 @@
 #include <limits>
 #include "menu.h"
 
-using namespace std;
-
 
 bool login(){
-    string password;
+    std::string password;
 
-    cout << "Введите пароль: ";
-    cin >> password;
+    std::cout << "Введите пароль: ";
+    std::cin >> password;
 
     if ( password == "admin"){
-        cout << "Авторизация успешна!" << endl;
+        std::cout << "Авторизация успешна!" << std::endl;
         return true;
     } else {
-        cout << "Неверный логин или пароль!" << endl;
+        std::cout << "Неверный пароль!" << std::endl;
         return false;
     }
 }
@@ -28,29 +26,29 @@ int main(){
     }
 
     int input = -1;
-    string inFile, outFile;
+    std::string inFile, outFile;
 
     while (input != Menu::EXIT){
 
-    cout << endl <<  "\t Меню " << endl;
-    cout << "Выберите какой шифр хотите использовать: " << endl;
-    cout << "1. RSA "<< endl;
-    cout << "2. RC4 "<< endl;
-    cout << "0. Выход" << endl;
-    cout << ">> ";
+    std::cout << std::endl <<  "\t Меню " << std::endl;
+    std::cout << "Выберите какой шифр хотите использовать: " << std::endl;
+    std::cout << "1. RSA "<< std::endl;
+    std::cout << "2. RC4 "<< std::endl;
+    std::cout << "0. Выход" << std::endl;
+    std::cout << ">> ";
    
 
-    if (!(cin >> input)) {
-        cout << "Ошибка! Введите числовое значение" << endl;
-        cin.clear(); 
-        cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
+    if (!(std::cin >> input)) {
+        std::cout << "Ошибка! Введите числовое значение" << std::endl;
+        std::cin.clear(); 
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
         input = -1;
         continue;
     }
 
     switch (input){
         case Menu::RSA:
-
+            
             break;
 
         case Menu::RC4:
@@ -58,10 +56,11 @@ int main(){
             break;
 
         case Menu::EXIT:
+
             break;
             
         default:
-            cout << "Ошибка! Такого действия нет" << endl;
+            std::cout << "Ошибка! Такого действия нет" << std::endl;
         
     }
 }
