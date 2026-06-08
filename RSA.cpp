@@ -14,7 +14,7 @@ uint64_t binPower(uint64_t base, uint64_t power, uint64_t modulo){
     base %= modulo;
     while (power > 0){
         if (power % 2 == 1){ // если текущий бит равен 1
-            result = (result * base) % modulo;
+            result = (static_cast<unsigned __int128>(result) * base) % modulo;
         }
         base = (base * base) % modulo;
         power /= 2; // переходим к следующему биту
