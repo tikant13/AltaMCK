@@ -33,7 +33,7 @@ void menuRSA(){
             
             break;
 
-        case MenuRSA::Encryption:
+        case MenuRSA::Encryption: {
 
             std::cout << "Введите имя исходного файла: ";
             std::cin >> inFile;
@@ -75,9 +75,9 @@ void menuRSA(){
                 dlclose(hLib);
             #endif
             break;
-        
+        }
 
-        case MenuRSA::Decipher:
+        case MenuRSA::Decipher: {
 
             std::cout << "Введите имя зашифрованного файла: ";
             std::cin >> inFile;
@@ -110,7 +110,7 @@ void menuRSA(){
             } else {
                 std::cout << "Ошибка! Функция decryptFile не найдена в библиотеке." << std::endl;
             }
-
+        
                
             #ifdef _WIN32
                 FreeLibrary(hLib);
@@ -119,6 +119,7 @@ void menuRSA(){
             #endif
             
             break;
+        }
         
         case MenuRSA::RSA_EXIT:
             break;
