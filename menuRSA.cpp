@@ -9,6 +9,7 @@
 #endif
 
 typedef void (*RSA_Func)(const char*, const char*, uint64_t, uint64_t);
+typedef bool (*KeyGenFunc)(uint64_t, uint64_t, uint64_t, uint64_t&, uint64_t&, uint64_t&);
 
 void menuRSA(){
 
@@ -29,9 +30,52 @@ void menuRSA(){
     std::cin >> input;
 
     switch (input){
-        case MenuRSA::KeyGen:
+        case MenuRSA::KeyGen:{
+            uint64_t p, q, e;
+            std::cout << "Введите простые p и q: ";
+            std::cin >> p >> q;
+            std::cout << "Выберите открытую экспоненту e: ";
+            std::cin >> e;
+            #ifdef _WIN32
+                HINSTANCE hLib = LoadLibraryA("RSA.dll"); 
+            #else
+                void* hLib = dlopen("./libRSA.so", RTLD_LAZY);
+            #endif
+
+            if (!hLib) {
+                std::cout << "Ошибка! Не удалось загрузить библиотеку RSA." << std::endl;
+                break;
+            }
+
             
+            #ifdef _WIN32
+                KeyGen_Func generateKeys = (KeyGen_Func)GetProcAddress(hLib, "generateKeys");
+            #else
+                KeyGenFunc generateKeys = (KeyGenFunc)dlsym(hLib, "generateKeys");
+            #endif
+
+            if (generateKeys) {
+                uint64_t n = 0, d = 0, phi = 0;
+                if (generateKeys(p, q, e, n, d, phi)) {
+                    std::cout << std::endl << "Ключи: " << std::endl;
+                    std::cout << "Открытый ключ: e = " << e << "  n = " << n << std::endl;
+                    std::cout << "Закрытый ключ: d = " << d << "  n = " << n << std::endl;
+                } else {
+                    std::cout << "Ошибка! Неверные параметры (числа не простые или неверная экспонента e)." << std::endl;
+                }
+
+            } else {
+                std::cout << "Ошибка! Функция generateKeys не найдена в библиотеке." << std::endl;
+            }
+
+            #ifdef _WIN32
+                FreeLibrary(hLib);
+            #else
+                dlclose(hLib);
+            #endif
+
             break;
+        }
 
         case MenuRSA::Encryption: {
 
