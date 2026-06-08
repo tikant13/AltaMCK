@@ -34,7 +34,7 @@ bool isPrime(uint64_t n){
     return true;
 }
 
-uint64_t extEuclid(uint64_t a, uint64_t b, uint64_t &u, uint64_t &v) {
+uint64_t extEuclid(uint64_t a, uint64_t b, int64_t &u, int64_t &v) {
     
     u = 1; 
     v = 0;
@@ -60,6 +60,34 @@ uint64_t extEuclid(uint64_t a, uint64_t b, uint64_t &u, uint64_t &v) {
 }
 
 extern "C" {
+
+    EXPORT bool generateKeys(uint64_t p, uint64_t q, uint64_t e, uint64_t &out_n, uint64_t &out_d, uint64_t &out_phi) {
+
+        if (!isPrime(p) || !isPrime(q)) {
+            return false; 
+        }
+
+        uint64_t phi = (p - 1) * (q - 1);
+        out_phi = phi; // сохраняем для вывода в меню
+
+        if (e <= 1 || e >= phi) {
+            return false;
+        }
+
+        int64_t u, v;
+        uint64_t nod = extEuclid(e, phi, u, v);
+
+        if (nod != 1) {
+            return false; // e и phi не взаимно простые
+        }
+
+        out_n = p * q;
+        
+        out_d = (u % static_cast<int64_t>(phi) + static_cast<int64_t>(phi)) % static_cast<int64_t>(phi); //переводим в положительное
+
+        return true;
+    }
+
     EXPORT void encryptFile(const char* inputPath, const char* outputPath, uint64_t e, uint64_t n) {
     
         std::ifstream inFile(inputPath, std::ios::binary); // открываем файл как бинарный
