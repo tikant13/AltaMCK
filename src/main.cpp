@@ -1,3 +1,5 @@
+#include "menuXOR.h"
+#include "menuLCG.h"
 #include <iostream>
 #include <string>
 #include <limits>
@@ -35,6 +37,8 @@ int main(){
     std::cout << "Выберите какой шифр хотите использовать: " << std::endl;
     std::cout << "1. RSA "<< std::endl;
     std::cout << "2. RC4 "<< std::endl;
+    std::cout << "3. XOR "<< std::endl;
+    std::cout << "4. LCG "<< std::endl;
     std::cout << "0. Выход" << std::endl;
     std::cout << ">> ";
    
@@ -55,6 +59,15 @@ int main(){
         case Menu::RC4:
 
             break;
+
+        case Menu::XOR:
+            menuXOR();
+            break;
+
+        case Menu::LCG:
+            menuLCG();
+            break;
+
 
         case Menu::EXIT:
 

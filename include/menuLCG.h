@@ -1,13 +1,13 @@
 #pragma once 
 
-void menuRSA();
+void menuLCG();
 
-namespace MenuRSA{
+namespace MenuLCG{
 
     enum Type {
         KeyGen = 1,
         Encryption = 2,
         Decipher = 3,
-        RSA_EXIT = 0,
+        LCG_EXIT = 0,
     };
 }
