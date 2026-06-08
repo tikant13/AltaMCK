@@ -39,7 +39,7 @@ void menuRSA(){
             #ifdef _WIN32
                 HINSTANCE hLib = LoadLibraryA("RSA.dll"); 
             #else
-                void* hLib = dlopen("./libRSA.so", RTLD_LAZY);
+                void* hLib = dlopen("./build/libRSA.so", RTLD_LAZY);
             #endif
 
             if (!hLib) {
@@ -91,7 +91,7 @@ void menuRSA(){
             #ifdef _WIN32
                 HINSTANCE hLib = LoadLibraryA("RSA.dll"); 
             #else
-                void* hLib = dlopen("./libRSA.so", RTLD_LAZY);
+                void* hLib = dlopen("./build/libRSA.so", RTLD_LAZY);
             #endif
 
             if (!hLib) {
@@ -135,7 +135,7 @@ void menuRSA(){
             #ifdef _WIN32
                 HINSTANCE hLib = LoadLibraryA("RSA.dll"); 
             #else
-                void* hLib = dlopen("./libRSA.so", RTLD_LAZY);
+                void* hLib = dlopen("./build/libRSA.so", RTLD_LAZY);
             #endif
 
             if (!hLib) {
