@@ -2,8 +2,6 @@
 #include <stdint.h>
 #include "menuRSA.h"
 
-using namespace std;
-
 #ifdef _WIN32
     #include <windows.h>
 #else
@@ -15,20 +13,20 @@ typedef void (*RSA_Func)(const char*, const char*, uint64_t, uint64_t);
 void menuRSA(){
 
     int input = -1;
-    string inFile, outFile;
+    std::string inFile, outFile;
     uint64_t e, d, n;
 
     while (input != MenuRSA::RSA_EXIT){
 
-    cout << endl <<  "Шифр RSA " << endl;
-    cout << "1. Генерация ключей "<< endl;
-    cout << "2. Шифрование "<< endl;
-    cout << "3. Расшифрование "<< endl;
-    cout << "0. Выйти в меню" << endl;
-    cout << ">> ";
+    std::cout << std::endl <<  "Шифр RSA " << std::endl;
+    std::cout << "1. Генерация ключей "<< std::endl;
+    std::cout << "2. Шифрование "<< std::endl;
+    std::cout << "3. Расшифрование "<< std::endl;
+    std::cout << "0. Выйти в меню" << std::endl;
+    std::cout << ">> ";
    
 
-    cin >> input;
+    std::cin >> input;
 
     switch (input){
         case MenuRSA::KeyGen:
@@ -37,14 +35,14 @@ void menuRSA(){
 
         case MenuRSA::Encryption:
 
-            cout << "Введите имя исходного файла: ";
-            cin >> inFile;
-            cout << "Введите имя для зашифрованного файла: ";
-            cin >> outFile;
-            cout << "Введите открытую экспоненту e: ";
-            cin >> e;
-            cout << "Введите n: ";
-            cin >> n;
+            std::cout << "Введите имя исходного файла: ";
+            std::cin >> inFile;
+            std::cout << "Введите имя для зашифрованного файла: ";
+            std::cin >> outFile;
+            std::cout << "Введите открытую экспоненту e: ";
+            std::cin >> e;
+            std::cout << "Введите n: ";
+            std::cin >> n;
 
             #ifdef _WIN32
                 HINSTANCE hLib = LoadLibraryA("RSA.dll"); 
@@ -53,7 +51,7 @@ void menuRSA(){
             #endif
 
             if (!hLib) {
-                cout << "Ошибка! Не удалось найти или загрузить библиотеку RSA." << endl;
+                std::cout << "Ошибка! Не удалось найти или загрузить библиотеку RSA." << std::endl;
                 break;
             }
 
@@ -67,7 +65,7 @@ void menuRSA(){
             if (encrypt) {
                 encrypt(inFile.c_str(), outFile.c_str(), e, n); 
             } else {
-                cout << "Ошибка! Функция encryptFile не найдена в библиотеке." << endl;
+                std::cout << "Ошибка! Функция encryptFile не найдена в библиотеке." << std::endl;
             }
 
             //выгружаем из памяти
@@ -81,14 +79,14 @@ void menuRSA(){
 
         case MenuRSA::Decipher:
 
-            cout << "Введите имя зашифрованного файла: ";
-            cin >> inFile;
-            cout << "Введите имя для расшифрованного файла: ";
-            cin >> outFile;
-            cout << "Введите закрытую экспоненту d: ";
-            cin >> d;
-            cout << "Введите n: ";
-            cin >> n;
+            std::cout << "Введите имя зашифрованного файла: ";
+            std::cin >> inFile;
+            std::cout << "Введите имя для расшифрованного файла: ";
+            std::cin >> outFile;
+            std::cout << "Введите закрытую экспоненту d: ";
+            std::cin >> d;
+            std::cout << "Введите n: ";
+            std::cin >> n;
             
             #ifdef _WIN32
                 HINSTANCE hLib = LoadLibraryA("RSA.dll"); 
@@ -97,7 +95,7 @@ void menuRSA(){
             #endif
 
             if (!hLib) {
-                cout << "Ошибка! Не удалось найти или загрузить библиотеку RSA." << endl;
+                std::cout << "Ошибка! Не удалось найти или загрузить библиотеку RSA." << std::endl;
                 break;
             }
 
@@ -110,7 +108,7 @@ void menuRSA(){
             if (decrypt) {
                 decrypt(inFile.c_str(), outFile.c_str(), d, n);
             } else {
-                cout << "Ошибка! Функция decryptFile не найдена в библиотеке." << endl;
+                std::cout << "Ошибка! Функция decryptFile не найдена в библиотеке." << std::endl;
             }
 
                
@@ -126,7 +124,7 @@ void menuRSA(){
             break;
             
         default:
-            cout << "Ошибка! Такого действия нет" << endl;
+            std::cout << "Ошибка! Такого действия нет" << std::endl;
         
     }
 }
