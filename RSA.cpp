@@ -22,6 +22,43 @@ uint64_t binPower(uint64_t base, uint64_t power, uint64_t modulo){
     return result;
 }
 
+bool isPrime(uint64_t n){ 
+    if (n <= 1){
+        return false; 
+    }
+    for (uint64_t i=2; i * i <= n; ++i){
+        if (n % i == 0){
+            return false;
+        }
+    }
+    return true;
+}
+
+uint64_t extEuclid(uint64_t a, uint64_t b, uint64_t &u, uint64_t &v) {
+    
+    u = 1; 
+    v = 0;
+    uint64_t uPrev = 0; 
+    uint64_t vPrev = 1;
+
+    while (b != 0) {
+       
+        uint64_t wholePart = a / b;
+        uint64_t remainder = a % b;
+
+        uint64_t nextu = u - wholePart * uPrev; 
+        uint64_t nextv = v - wholePart * vPrev;
+
+        a = b;
+        b = remainder;
+        u = uPrev;
+        uPrev = nextu;
+        v = vPrev;
+        vPrev = nextv;
+    }
+    return a;
+}
+
 extern "C" {
     EXPORT void encryptFile(const char* inputPath, const char* outputPath, uint64_t e, uint64_t n) {
     
