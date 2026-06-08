@@ -19,7 +19,7 @@ void menuRSA(){
 
     while (input != MenuRSA::RSA_EXIT){
 
-    std::cout << std::endl <<  "Шифр RSA " << std::endl;
+    std::cout << std::endl << "Шифр RSA " << std::endl;
     std::cout << "1. Генерация ключей "<< std::endl;
     std::cout << "2. Шифрование "<< std::endl;
     std::cout << "3. Расшифрование "<< std::endl;

@@ -2,6 +2,7 @@
 #include <string>
 #include <limits>
 #include "menu.h"
+#include "menuRSA.h"
 
 
 bool login(){
@@ -48,7 +49,7 @@ int main(){
 
     switch (input){
         case Menu::RSA:
-            
+            menuRSA();
             break;
 
         case Menu::RC4:
