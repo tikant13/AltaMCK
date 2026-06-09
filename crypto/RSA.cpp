@@ -13,11 +13,11 @@ uint64_t binPower(uint64_t base, uint64_t power, uint64_t modulo){
     uint64_t result = 1;
     base %= modulo;
     while (power > 0){
-        if (power % 2 == 1){ // если текущий бит равен 1
+        if (power % 2 == 1){ 
             result = (static_cast<unsigned __int128>(result) * base) % modulo;
         }
         base = (base * base) % modulo;
-        power /= 2; // переходим к следующему биту
+        power /= 2; 
     }
     return result;
 }
@@ -134,6 +134,51 @@ extern "C" {
         std::cout << "Расшифрование завершено. Файл сохранен: " << outputPath << std::endl;
         inFile.close();
         outFile.close();
+    }
+
+    EXPORT void encryptText(const char* inputText, char* outputText, uint64_t e, uint64_t n) {
+        if (!inputText || !outputText){
+             return;
+        }
+
+        std::stringstream ss;
+        
+        
+        while (*inputText) {
+            unsigned char m = static_cast<unsigned char>(*inputText);
+            uint64_t c = binPower(m, e, n); 
+            ss << c << " "; 
+            inputText++;
+        }
+
+        std::string res = ss.str();
+        
+        
+        for (size_t i = 0; i < res.length(); ++i) {
+            outputText[i] = res[i];
+        }
+        outputText[res.length()] = '\0'; 
+    }
+
+    EXPORT void decryptText(const char* inputText, char* outputText, uint64_t d, uint64_t n) {
+        if (!inputText || !outputText) return;
+
+        std::stringstream ss(inputText);
+        std::string outStr;
+        uint64_t c;
+
+        // читаем числа из строки, расшифровываем и собираем исходный текст
+        while (ss >> c) {
+            uint64_t m = binPower(c, d, n); 
+            char ch = static_cast<char>(m);
+            outStr += ch;
+        }
+
+        // Копируем обратно в буфер
+        for (size_t i = 0; i < outStr.length(); ++i) {
+            outputText[i] = outStr[i];
+        }
+        outputText[outStr.length()] = '\0';
     }
 
 }
