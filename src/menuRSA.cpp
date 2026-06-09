@@ -21,8 +21,10 @@ void menuRSA(){
 
     std::cout << std::endl << "Шифр RSA " << std::endl;
     std::cout << "1. Генерация ключей "<< std::endl;
-    std::cout << "2. Шифрование "<< std::endl;
-    std::cout << "3. Расшифрование "<< std::endl;
+    std::cout << "2. Шифрование файла "<< std::endl;
+    std::cout << "3. Расшифрование файла "<< std::endl;
+    std::cout << "4. Шифрование текста "<< std::endl;
+    std::cout << "5. Расшифрование текста"<< std::endl;
     std::cout << "0. Выйти в меню" << std::endl;
     std::cout << ">> ";
    
@@ -39,7 +41,7 @@ void menuRSA(){
             #ifdef _WIN32
                 HINSTANCE hLib = LoadLibraryA("RSA.dll"); 
             #else
-                void* hLib = dlopen("./build/libRSA.so", RTLD_LAZY);
+                void* hLib = dlopen("./libRSA.so", RTLD_LAZY);
             #endif
 
             if (!hLib) {
@@ -49,7 +51,7 @@ void menuRSA(){
 
             
             #ifdef _WIN32
-                KeyGen_Func generateKeys = (KeyGenFunc)GetProcAddress(hLib, "generateKeys");
+                KeyGenFunc generateKeys = (KeyGenFunc)GetProcAddress(hLib, "generateKeys");
             #else
                 KeyGenFunc generateKeys = (KeyGenFunc)dlsym(hLib, "generateKeys");
             #endif
@@ -77,7 +79,7 @@ void menuRSA(){
             break;
         }
 
-        case MenuRSA::Encryption: {
+        case MenuRSA::EncryptionFile: {
 
             std::cout << "Введите имя исходного файла: ";
             std::cin >> inFile;
@@ -91,7 +93,7 @@ void menuRSA(){
             #ifdef _WIN32
                 HINSTANCE hLib = LoadLibraryA("RSA.dll"); 
             #else
-                void* hLib = dlopen("./build/libRSA.so", RTLD_LAZY);
+                void* hLib = dlopen("./libRSA.so", RTLD_LAZY);
             #endif
 
             if (!hLib) {
@@ -120,7 +122,7 @@ void menuRSA(){
             break;
         }
 
-        case MenuRSA::Decipher: {
+        case MenuRSA::DecryptionFile: {
 
             std::cout << "Введите имя зашифрованного файла: ";
             std::cin >> inFile;
@@ -134,7 +136,7 @@ void menuRSA(){
             #ifdef _WIN32
                 HINSTANCE hLib = LoadLibraryA("RSA.dll"); 
             #else
-                void* hLib = dlopen("./build/libRSA.so", RTLD_LAZY);
+                void* hLib = dlopen("./libRSA.so", RTLD_LAZY);
             #endif
 
             if (!hLib) {
@@ -163,7 +165,97 @@ void menuRSA(){
             
             break;
         }
+
+        case MenuRSA::EncryptionText: {
+            std::cout << "Введите текст для шифрования: ";
+            std::string inputText;
+            std::cin.ignore(); // Очистка буфера перед getline
+            std::getline(std::cin, inputText);
+            std::cout << "Введите открытую экспоненту e: ";
+            std::cin >> e;
+            std::cout << "Введите n: ";
+            std::cin >> n;
+
+            char outputText[1024]; // Буфер для зашифрованного текста
+
+            #ifdef _WIN32
+                HINSTANCE hLib = LoadLibraryA("RSA.dll"); 
+            #else
+                void* hLib = dlopen("./libRSA.so", RTLD_LAZY);
+            #endif
+
+            if (!hLib) {
+                std::cout << "Ошибка! Не удалось найти или загрузить библиотеку RSA." << std::endl;
+                break;
+            }
+
+            #ifdef _WIN32
+                RSA_Func encryptText = (RSA_Func)GetProcAddress(hLib, "encryptText");
+            #else
+                RSA_Func encryptText = (RSA_Func)dlsym(hLib, "encryptText");
+            #endif
+
+            if (encryptText) {
+                encryptText(inputText.c_str(), outputText, e, n);
+                std::cout << "Зашифрованный текст: " << outputText << std::endl;
+            } else {
+                std::cout << "Ошибка! Функция encryptText не найдена в библиотеке." << std::endl;
+            }
+
+            #ifdef _WIN32
+                FreeLibrary(hLib);
+            #else
+                dlclose(hLib);
+            #endif
+            
+            break;
+        }
         
+        case MenuRSA::DecryptionText: {
+            std::cout << "Введите зашифрованный текст: ";
+            std::string inputText;
+            std::cin.ignore(); // Очистка буфера перед getline
+            std::getline(std::cin, inputText);
+            std::cout << "Введите закрытую экспоненту d: ";
+            std::cin >> d;
+            std::cout << "Введите n: ";
+            std::cin >> n;
+
+            char outputText[1024]; // Буфер для расшифрованного текста
+
+            #ifdef _WIN32
+                HINSTANCE hLib = LoadLibraryA("RSA.dll"); 
+            #else
+                void* hLib = dlopen("./libRSA.so", RTLD_LAZY);
+            #endif
+
+            if (!hLib) {
+                std::cout << "Ошибка! Не удалось найти или загрузить библиотеку RSA." << std::endl;
+                break;
+            }
+
+            #ifdef _WIN32
+                RSA_Func decryptText = (RSA_Func)GetProcAddress(hLib, "decryptText");
+            #else
+                RSA_Func decryptText = (RSA_Func)dlsym(hLib, "decryptText");
+            #endif
+
+            if (decryptText) {
+                decryptText(inputText.c_str(), outputText, d, n);
+                std::cout << "Расшифрованный текст: " << outputText << std::endl;
+            } else {
+                std::cout << "Ошибка! Функция decryptText не найдена в библиотеке." << std::endl;
+            }
+
+            #ifdef _WIN32
+                FreeLibrary(hLib);
+            #else
+                dlclose(hLib);
+            #endif
+            
+            break;
+        }
+
         case MenuRSA::RSA_EXIT:
             break;
             
