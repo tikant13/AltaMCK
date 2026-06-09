@@ -49,7 +49,7 @@ void menuRSA(){
 
             
             #ifdef _WIN32
-                KeyGen_Func generateKeys = (KeyGen_Func)GetProcAddress(hLib, "generateKeys");
+                KeyGen_Func generateKeys = (KeyGenFunc)GetProcAddress(hLib, "generateKeys");
             #else
                 KeyGenFunc generateKeys = (KeyGenFunc)dlsym(hLib, "generateKeys");
             #endif
@@ -112,7 +112,6 @@ void menuRSA(){
                 std::cout << "Ошибка! Функция encryptFile не найдена в библиотеке." << std::endl;
             }
 
-            //выгружаем из памяти
             #ifdef _WIN32
                 FreeLibrary(hLib);
             #else
