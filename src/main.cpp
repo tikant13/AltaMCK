@@ -20,10 +20,10 @@ bool login(std::string& password){ // желательно бы куда-ниб�
 
 int main(){
     std::cout << "Введите пароль: ";
-     std::string password;
+    std::string password;
     std::cin >> password;
 
-    if (!login()) {
+    if (!login(password)) {
         return 0;
     }
 
