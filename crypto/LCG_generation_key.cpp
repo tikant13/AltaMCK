@@ -8,7 +8,7 @@ std::vector <uint64_t>  generation_key(uint64_t m, uint64_t Xn, uint64_t c, size
     std::vector <uint64_t> stream (size);
     static bool seeded = false;
     if(!seeded){
-    std::srand(static_cast<uint32_t>(time(nullptr)) ^ static_cast<uint32_t>(clock())); //clock() - processor's work time
+    std::srand(static_cast<uint32_t>(time(nullptr)) ^ static_cast<uint32_t>(clock())); 
     seeded = true;
     }
     static std::vector<uint64_t> steps;
@@ -31,5 +31,3 @@ std::vector <uint64_t>  generation_key(uint64_t m, uint64_t Xn, uint64_t c, size
 }
 
 
-
-//xxd encrypted.bin | head -5
