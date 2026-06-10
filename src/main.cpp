@@ -7,11 +7,7 @@
 #include "menuRSA.h"
 
 
-bool login(){
-    std::string password;
-
-    std::cout << "Введите пароль: ";
-    std::cin >> password;
+bool login(std::string& password){ // желательно бы куда-нибудь переместить, а то смешно выглядит 
 
     if ( password == "admin"){
         std::cout << "Авторизация успешна!" << std::endl;
@@ -23,6 +19,9 @@ bool login(){
 }
 
 int main(){
+    std::cout << "Введите пароль: ";
+     std::string password;
+    std::cin >> password;
 
     if (!login()) {
         return 0;
