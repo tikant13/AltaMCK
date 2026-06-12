@@ -33,10 +33,10 @@ build/libxor.$(LIB_EXT): crypto/XOR_encryption.cpp crypto/XOR_decryption.cpp cry
 build/liblcg.$(LIB_EXT): crypto/LCG_encryption.cpp crypto/LCG_decryption.cpp crypto/LCG_generation_key.cpp
 	$(CXX) $(CXXFLAGS) -shared -fPIC $^ -o $@
 
-build/libspiral.$(LIB_EXT): crypto/Spiral.cpp
-    $(CXX) $(CXXFLAGS) -shared -fPIC $^ -o $@
+build/libspiral.$(LIB_EXT): crypto/Spiral_encrypt.cpp crypto/Spiral_decrypt.cpp
+	$(CXX) $(CXXFLAGS) -shared -fPIC $^ -o $@
 
-build/librailfence.$(LIB_EXT): crypto/Railfence.cpp
+build/librailfence.$(LIB_EXT): crypto/RailFence_encrypt.cpp crypto/RailFence_decrypt.cpp
 	$(CXX) $(CXXFLAGS) -shared -fPIC $^ -o $@
 
 build/main: src/main.cpp \
@@ -44,16 +44,14 @@ build/main: src/main.cpp \
             src/menuRC4.cpp \
             src/menuXOR.cpp \
             src/menuLCG.cpp \
-            src/menuRailfence.cpp \
+            src/menuRailFence.cpp \
             src/menuSpiral.cpp \
             crypto/XOR_encryption.cpp \
             crypto/XOR_decryption.cpp \
             crypto/XOR_generation_key.cpp \
             crypto/LCG_encryption.cpp \
             crypto/LCG_decryption.cpp \
-            crypto/LCG_generation_key.cpp \
-            crypto/Railfence.cpp \
-            crypto/Spiral.cpp
+            crypto/LCG_generation_key.cpp
 	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
 
 build/xor_test: crypto/XOR_encryption.cpp crypto/XOR_decryption.cpp crypto/XOR_generation_key.cpp
