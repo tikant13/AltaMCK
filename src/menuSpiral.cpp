@@ -50,6 +50,21 @@ static void printResult(const vector<uint8_t>& data, const string& label) {
         cout << dec << "\n";
     }
 }
+static vector<uint8_t> hexToBytes(const string& hexStr) {
+    vector<uint8_t> bytes;
+    string cleanStr = "";
+    for (char c : hexStr) {
+        if (!isspace(c)) cleanStr += c;
+    }
+    for (size_t i = 0; i < cleanStr.length(); i += 2) {
+        if (i + 1 < cleanStr.length()) {
+            string byteString = cleanStr.substr(i, 2);
+            uint8_t byte = (uint8_t) strtol(byteString.c_str(), nullptr, 16);
+            bytes.push_back(byte);
+        }
+    }
+    return bytes;
+}
 
 static void checkMatrix(int& val, const string& name) {
     if (val < 2) {
@@ -170,9 +185,9 @@ void menuSpiral() {
                 } else {
                     cin.ignore();
                     cout << "Введите зашифрованный текст: ";
-                    string text;
-                    getline(cin, text);
-                    data = vector<uint8_t>(text.begin(), text.end());
+                    string hexText;
+                    getline(cin, hexText);
+                    data = hexToBytes(hexText);
                 }
 
                 uint8_t key[2] = { (uint8_t)row, (uint8_t)col };
