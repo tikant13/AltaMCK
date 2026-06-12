@@ -33,10 +33,10 @@ build/libxor.$(LIB_EXT): crypto/XOR_encryption.cpp crypto/XOR_decryption.cpp cry
 build/liblcg.$(LIB_EXT): crypto/LCG_encryption.cpp crypto/LCG_decryption.cpp crypto/LCG_generation_key.cpp
 	$(CXX) $(CXXFLAGS) -shared -fPIC $^ -o $@
 
-build/libspiral.$(LIB_EXT): crypto/Spiral_encrypt.cpp crypto/Spiral_decrypt.cpp
+build/libspiral.$(LIB_EXT): crypto/Spiral_encrypt.cpp crypto/Spiral_decrypt.cpp crypto/Spiral.cpp
 	$(CXX) $(CXXFLAGS) -shared -fPIC $^ -o $@
 
-build/librailfence.$(LIB_EXT): crypto/RailFence_encrypt.cpp crypto/RailFence_decrypt.cpp
+build/librailfence.$(LIB_EXT): crypto/RailFence_encrypt.cpp crypto/RailFence_decrypt.cpp crypto/RailFence.cpp
 	$(CXX) $(CXXFLAGS) -shared -fPIC $^ -o $@
 
 build/main: src/main.cpp \
