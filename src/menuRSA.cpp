@@ -40,14 +40,6 @@ void menuRSA(){
             std::cout << "Выберите открытую экспоненту e: ";
             std::cin >> e;
 
-             if (!(std::cin >> input)) {
-                std::cout << "Ошибка! Введите числовое значение" << std::endl;
-                std::cin.clear(); 
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
-                input = -1;
-                continue;
-            }
-
             
             #ifdef _WIN32
                 HINSTANCE hLib = LoadLibraryA("RSA.dll"); 
@@ -100,15 +92,6 @@ void menuRSA(){
             std::cin >> e;
             std::cout << "Введите n: ";
             std::cin >> n;
-
-            if (!(std::cin >> input)) {
-                std::cout << "Ошибка! Введите числовое значение" << std::endl;
-                std::cin.clear(); 
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
-                input = -1;
-                continue;
-            }
-
             
 
             #ifdef _WIN32
@@ -154,14 +137,6 @@ void menuRSA(){
             std::cout << "Введите n: ";
             std::cin >> n;
 
-            if (!(std::cin >> input)) {
-                std::cout << "Ошибка! Введите числовое значение" << std::endl;
-                std::cin.clear(); 
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
-                input = -1;
-                continue;
-            }
-            
             #ifdef _WIN32
                 HINSTANCE hLib = LoadLibraryA("RSA.dll"); 
             #else
@@ -204,14 +179,6 @@ void menuRSA(){
             std::cin >> e;
             std::cout << "Введите n: ";
             std::cin >> n;
-
-            if (!(std::cin >> n)) {
-                std::cout << "Ошибка! Введите числовое значение" << std::endl;
-                std::cin.clear();
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                n = -1;
-                continue;
-            }
 
             char outputText[1024]; // Буфер для зашифрованного текста
 
@@ -257,14 +224,6 @@ void menuRSA(){
             std::cin >> d;
             std::cout << "Введите n: ";
             std::cin >> n;
-
-            if (!(std::cin >> input)) {
-                std::cout << "Ошибка! Введите числовое значение" << std::endl;
-                std::cin.clear(); 
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
-                input = -1;
-                continue;
-            }
 
             char outputText[1024]; // Буфер для расшифрованного текста
 
