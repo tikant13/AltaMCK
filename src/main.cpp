@@ -5,6 +5,7 @@
 #include <limits>
 #include "menu.h"
 #include "menuRSA.h"
+#include "menuRC4.h"
 
 
 bool login(std::string& password){ // желательно бы куда-нибудь переместить, а то смешно выглядит 
@@ -56,7 +57,7 @@ int main(){
             break;
 
         case Menu::RC4:
-
+            menuRC4();
             break;
 
         case Menu::XOR:
