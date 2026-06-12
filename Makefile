@@ -2,34 +2,24 @@ CXX = g++
 CXXFLAGS = -std=c++17 -Wall -Wextra
 BUILD = build
 
-ifeq ($(OS), Windows_NT)
-    LIB_EXT = dll
-else
-    LIB_EXT = so
-endif
+all: buildDir \
+     $(BUILD)/librailfence.so \
+     $(BUILD)/libspiral.so \
+     $(BUILD)/main
 
-RF_SRC = railfence/encrypt.cpp railfence/decrypt.cpp
-SP_SRC = spiral/encrypt.cpp spiral/decrypt.cpp
-MENU_SRC = menu/menuRailFence.cpp menu/menuSpiral.cpp
-
-all: build_dir \
-     $(BUILD)/librailfence.$(LIB_EXT) \
-     $(BUILD)/libspiral.$(LIB_EXT) \
-     $(BUILD)/main \
-
-build_dir:
+buildDir:
 	mkdir -p $(BUILD)
 
-$(BUILD)/librailfence.$(LIB_EXT): $(RF_SRC)
-	$(CXX) $(CXXFLAGS) -shared -fPIC $^ -o $@
+$(BUILD)/librailfence.so: railfence/railfence.cpp cipher_api.h
+	$(CXX) $(CXXFLAGS) -shared -fPIC $< -o $@
 
-$(BUILD)/libspiral.$(LIB_EXT): $(SP_SRC)
-	$(CXX) $(CXXFLAGS) -shared -fPIC $^ -o $@
+$(BUILD)/libspiral.so: spiral/spiral.cpp cipher_api.h
+	$(CXX) $(CXXFLAGS) -shared -fPIC $< -o $@
 
-$(BUILD)/main: main/main.cpp $(MENU_SRC) $(RF_SRC) $(SP_SRC)
-	$(CXX) $(CXXFLAGS) $^ -o $@
+$(BUILD)/main: main/main.cpp menu/menuRailFence.cpp menu/menuSpiral.cpp cipher_api.h
+	$(CXX) $(CXXFLAGS) main/main.cpp menu/menuRailFence.cpp menu/menuSpiral.cpp -o $@ -ldl
 
 clean:
 	rm -rf $(BUILD)
 
-.PHONY: all build_dir clean
+.PHONY: all buildDir clean

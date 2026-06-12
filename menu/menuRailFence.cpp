@@ -1,11 +1,11 @@
 #include "menuRailFence.h"
-#include "../railfence/encrypt.h"
-#include "../railfence/decrypt.h"
+#include "../cipher_api.h"
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <string>
 #include <limits>
+#include <dlfcn.h>
 
 using namespace std;
 
@@ -30,6 +30,22 @@ static void checkRails(int& rails) {
 }
 
 void menuRailFence() {
+    void* handle = dlopen("./librailfence.so", RTLD_LAZY);
+    if (!handle) {
+        cerr << "Ошибка загрузки librailfence.so: " << dlerror() << "\n";
+        return;
+    }
+
+    auto fnEncrypt = (decltype(&cipherEncrypt)) dlsym(handle, "cipherEncrypt");
+    auto fnDecrypt = (decltype(&cipherDecrypt)) dlsym(handle, "cipherDecrypt");
+    auto fnSize = (decltype(&getOutputSize)) dlsym(handle, "getOutputSize");
+
+    if (!fnEncrypt || !fnDecrypt || !fnSize) {
+        cerr << "Ошибка: библиотека не экспортирует нужные функции\n";
+        dlclose(handle);
+        return;
+    }
+
     int input = -1;
     string inFile, outFile;
 
@@ -61,8 +77,19 @@ void menuRailFence() {
                 checkRails(rails1);
                 checkRails(rails2);
                 auto data = readFile(inFile);
-                auto encrypted = rfDoubleEncrypt(data, rails1, rails2);
-                writeFile(outFile, encrypted);
+                uint8_t key[2] = { (uint8_t)rails1, (uint8_t)rails2 };
+                ConstBuf kb = { key, 2 };
+                ConstBuf ib = { data.data(), data.size() };
+                size_t outSize = fnSize(data.size());
+                vector<uint8_t> outBuf(outSize);
+                MutBuf mb = { outBuf.data(), outSize };
+                int ret = fnEncrypt(kb, ib, &mb);
+                if (ret != 0) {
+                    cerr << "Ошибка шифрования: код " << ret << "\n";
+                    break;
+                }
+                outBuf.resize(mb.size);
+                writeFile(outFile, outBuf);
                 cout << "Зашифровано: " << outFile << "\n";
                 break;
             }
@@ -79,8 +106,19 @@ void menuRailFence() {
                 checkRails(rails1);
                 checkRails(rails2);
                 auto data = readFile(inFile);
-                auto decrypted = rfDoubleDecrypt(data, rails1, rails2);
-                writeFile(outFile, decrypted);
+                uint8_t key[2] = { (uint8_t)rails1, (uint8_t)rails2 };
+                ConstBuf kb = { key, 2 };
+                ConstBuf ib = { data.data(), data.size() };
+                size_t outSize = fnSize(data.size());
+                vector<uint8_t> outBuf(outSize);
+                MutBuf mb = { outBuf.data(), outSize };
+                int ret = fnDecrypt(kb, ib, &mb);
+                if (ret != 0) {
+                    cerr << "Ошибка расшифрования: код " << ret << "\n";
+                    break;
+                }
+                outBuf.resize(mb.size);
+                writeFile(outFile, outBuf);
                 cout << "Расшифровано: " << outFile << "\n";
                 break;
             }
@@ -90,4 +128,6 @@ void menuRailFence() {
                 cout << "Ошибка! Такого действия нет\n";
         }
     }
+
+    dlclose(handle);
 }

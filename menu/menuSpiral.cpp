@@ -1,11 +1,11 @@
 #include "menuSpiral.h"
-#include "../spiral/encrypt.h"
-#include "../spiral/decrypt.h"
+#include "../cipher_api.h"
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <string>
 #include <limits>
+#include <dlfcn.h>
 
 using namespace std;
 
@@ -30,6 +30,22 @@ static void checkMatrix(int& val, const string& name) {
 }
 
 void menuSpiral() {
+    void* handle = dlopen("./libspiral.so", RTLD_LAZY);
+    if (!handle) {
+        cerr << "Ошибка загрузки libspiral.so: " << dlerror() << "\n";
+        return;
+    }
+
+    auto fnEncrypt = (decltype(&cipherEncrypt)) dlsym(handle, "cipherEncrypt");
+    auto fnDecrypt = (decltype(&cipherDecrypt)) dlsym(handle, "cipherDecrypt");
+    auto fnSize = (decltype(&getOutputSize)) dlsym(handle, "getOutputSize");
+
+    if (!fnEncrypt || !fnDecrypt || !fnSize) {
+        cerr << "Ошибка: библиотека не экспортирует нужные функции\n";
+        dlclose(handle);
+        return;
+    }
+
     int input = -1;
     string inFile, outFile;
 
@@ -61,8 +77,19 @@ void menuSpiral() {
                 checkMatrix(row, "Строки");
                 checkMatrix(col, "Столбцы");
                 auto data = readFile(inFile);
-                auto encrypted = spEncrypt(data, row, col);
-                writeFile(outFile, encrypted);
+                uint8_t key[2] = { (uint8_t)row, (uint8_t)col };
+                ConstBuf kb = { key, 2 };
+                ConstBuf ib = { data.data(), data.size() };
+                size_t outSize = fnSize(data.size());
+                vector<uint8_t> outBuf(outSize);
+                MutBuf mb = { outBuf.data(), outSize };
+                int ret = fnEncrypt(kb, ib, &mb);
+                if (ret != 0) {
+                    cerr << "Ошибка шифрования: код " << ret << "\n";
+                    break;
+                }
+                outBuf.resize(mb.size);
+                writeFile(outFile, outBuf);
                 cout << "Зашифровано: " << outFile << "\n";
                 break;
             }
@@ -79,8 +106,19 @@ void menuSpiral() {
                 checkMatrix(row, "Строки");
                 checkMatrix(col, "Столбцы");
                 auto data = readFile(inFile);
-                auto decrypted = spDecrypt(data, row, col);
-                writeFile(outFile, decrypted);
+                uint8_t key[2] = { (uint8_t)row, (uint8_t)col };
+                ConstBuf kb = { key, 2 };
+                ConstBuf ib = { data.data(), data.size() };
+                size_t outSize = fnSize(data.size());
+                vector<uint8_t> outBuf(outSize);
+                MutBuf mb = { outBuf.data(), outSize };
+                int ret = fnDecrypt(kb, ib, &mb);
+                if (ret != 0) {
+                    cerr << "Ошибка расшифрования: код " << ret << "\n";
+                    break;
+                }
+                outBuf.resize(mb.size);
+                writeFile(outFile, outBuf);
                 cout << "Расшифровано: " << outFile << "\n";
                 break;
             }
@@ -90,4 +128,6 @@ void menuSpiral() {
                 cout << "Ошибка! Такого действия нет\n";
         }
     }
+
+    dlclose(handle);
 }
