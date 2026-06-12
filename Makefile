@@ -1,11 +1,12 @@
 CXX = g++
 CXXFLAGS = -std=c++17 -Wall -Wextra -I include
-LDFLAGS = -ldl
+
 
 ifeq ($(OS), Windows_NT)
     LIB_EXT = dll
 else
     LIB_EXT = so
+	LDFLAGS = -ldl
 endif
 
 all: build_dir build/libRSA.$(LIB_EXT) build/libRC4.$(LIB_EXT) build/libxor.$(LIB_EXT) build/liblcg.$(LIB_EXT) build/main
