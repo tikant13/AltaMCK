@@ -1,8 +1,8 @@
 #include "LCG_generation_key.h"
 #include <cstdint>
 #include <vector>
-#include <cstdlib>//
-#include <ctime> //
+#include <cstdlib>
+#include <ctime> 
 
 std::vector <uint64_t>  generation_key(uint64_t m, uint64_t Xn, uint64_t c, size_t size){
     std::vector <uint64_t> stream (size);
