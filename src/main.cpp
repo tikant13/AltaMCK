@@ -7,6 +7,12 @@
 #include "menuRSA.h"
 #include "menuRC4.h"
 
+#ifdef _WIN32
+    #define NOMINMAX
+    #include <windows.h>
+#endif
+
+
 
 bool login(std::string& password){ // желательно бы куда-нибудь переместить, а то смешно выглядит 
 
@@ -20,6 +26,11 @@ bool login(std::string& password){ // желательно бы куда-ниб�
 }
 
 int main(){
+    #ifdef _WIN32
+        SetConsoleCP(65001);
+        SetConsoleOutputCP(65001);
+    #endif
+
     std::cout << "Введите пароль: ";
     std::string password;
     std::cin >> password;
