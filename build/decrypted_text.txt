@@ -1,2 +1,0 @@
-hello = privet != poka = goodbye 
-это Аххилес, сын Пелея
